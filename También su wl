@@ -2705,6 +2705,8 @@ Calculadora2:AddButton("Calcular", function()
 end)
 
 local InventoryTab = window:AddTab("Inventory")
+-- INVENTORY TAB
+
 InventoryTab:AddLabel("Egg Gifter:").TextSize = 22
 
 local proteinEggLabel = InventoryTab:AddLabel("Protein Eggs: 0")
@@ -2752,13 +2754,13 @@ InventoryTab:AddButton(
                     [2] = selectedPlayer,
                     [3] = Players.LocalPlayer.consumablesFolder:FindFirstChild("Protein Egg")
                 }
-
                 ReplicatedStorage.rEvents.giftRemote:InvokeServer(unpack(args))
             end
         end
     end
 )
 
+-- SHAKE GIFTER
 InventoryTab:AddLabel("Shake Gifter:").TextSize = 22
 
 local tropicalShakeLabel = InventoryTab:AddLabel("Tropical Shakes: 0")
@@ -2783,14 +2785,12 @@ local function updateItemCount()
     tropicalShakeLabel.Text = "Tropical Shakes: " .. tropicalShakeCount
 end
 
-task.spawn(
-    function()
-        while true do
-            updateItemCount()
-            task.wait(0.25)
-        end
+task.spawn(function()
+    while true do
+        updateItemCount()
+        task.wait(0.25)
     end
-)
+end)
 
 local selectedPlayer = nil
 local shakeCount = 0
@@ -2809,13 +2809,11 @@ for _, player in ipairs(Players:GetPlayers()) do
     end
 end
 
-Players.PlayerAdded:Connect(
-    function(player)
-        if player ~= Players.LocalPlayer then
-            playerDropdown:Add(player.Name)
-        end
+Players.PlayerAdded:Connect(function(player)
+    if player ~= Players.LocalPlayer then
+        playerDropdown:Add(player.Name)
     end
-)
+end)
 
 InventoryTab:AddTextBox(
     "Amount",
@@ -2834,13 +2832,13 @@ InventoryTab:AddButton(
                     [2] = selectedPlayer,
                     [3] = Players.LocalPlayer.consumablesFolder:FindFirstChild("Tropical Shake")
                 }
-
                 ReplicatedStorage.rEvents.giftRemote:InvokeServer(unpack(args))
             end
         end
     end
 )
 
+-- EGG DEVOUR
 InventoryTab:AddLabel("Eater:").TextSize = 22
 
 local function activateProteinEgg()
@@ -2852,18 +2850,16 @@ end
 
 local running = false
 
-task.spawn(
-    function()
-        while true do
-            if running then
-                activateProteinEgg()
-                task.wait(0.25)
-            else
-                task.wait(1)
-            end
+task.spawn(function()
+    while true do
+        if running then
+            activateProteinEgg()
+            task.wait(0.25)
+        else
+            task.wait(1)
         end
     end
-)
+end)
 
 local switch =
     InventoryTab:AddSwitch(
@@ -2877,6 +2873,7 @@ local switch =
 )
 switch:Set(false)
 
+-- EAT EVERYTHING
 local itemList = {
     "Tropical Shake",
     "Energy Shake",
@@ -2908,8 +2905,7 @@ local function activateRandomItems(count)
         shuffledItems[i], shuffledItems[j] = shuffledItems[j], shuffledItems[i]
     end
     for i = 1, math.min(count, #shuffledItems) do
-        local tool =
-            player.Character:FindFirstChild(shuffledItems[i]) or player.Backpack:FindFirstChild(shuffledItems[i])
+        local tool = player.Character:FindFirstChild(shuffledItems[i]) or player.Backpack:FindFirstChild(shuffledItems[i])
         if tool then
             local eventName = formatEventName(shuffledItems[i])
             muscleEvent:FireServer(eventName, tool)
@@ -2919,18 +2915,16 @@ end
 
 local running = false
 
-task.spawn(
-    function()
-        while true do
-            if running then
-                activateRandomItems(4)
-                task.wait(0.5)
-            else
-                task.wait(0.5)
-            end
+task.spawn(function()
+    while true do
+        if running then
+            activateRandomItems(4)
+            task.wait(0.5)
+        else
+            task.wait(0.5)
         end
     end
-)
+end)
 
 local switch =
     InventoryTab:AddSwitch(
@@ -2942,6 +2936,7 @@ local switch =
         end
     end
 )
+switch:Set(false)
 local Credits = window:AddTab("Credits")
 
 Credits:AddLabel("Version 2")
